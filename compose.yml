@@ -1,0 +1,24 @@
+services:
+  nf:
+    container_name: nf
+    restart: no
+    image: normalframework.azurecr.io/normalframework/nf-full:3.5
+    environment:
+      REDIS_ADDRESS: nf-redis:6379
+    ports:
+      - 8080:8080
+    depends_on:
+      - nf-redis
+    tmpfs:
+      - /run:exec
+      - /etc/nginx/conf.d/
+      - /tmp
+    volumes:
+      - ./nf-data:/var
+
+  nf-redis:
+    container_name: nf-redis
+    restart: no
+    image: normalframework.azurecr.io/normalframework/redis:3.5
+    volumes:
+      - ./redis-data:/data
